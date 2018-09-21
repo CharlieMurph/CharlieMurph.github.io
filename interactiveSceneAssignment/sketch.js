@@ -9,7 +9,7 @@ let mysong;
 let smash;
 let x, y;
 let dx, dy;
-let scalar;
+let shake = false;
 let death;
 
 function preload() {
@@ -24,10 +24,14 @@ function keyTyped() {
     placeEllipse();
 
   }
-  else if ((key === "p") || (deviceshaken())) {
+  else if ((key === "p") || (shake)) {
       mysong.play();
       death = true
   }
+}
+
+function deviceShaken() {
+  return shake
 }
 
 //Smashmouth image bouncing around screen
