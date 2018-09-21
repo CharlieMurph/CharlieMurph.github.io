@@ -24,10 +24,7 @@ function keyTyped() {
     placeEllipse();
 
   }
-  else if (key === "b") {
-
-  }
-  else if (key === "p") {
+  else if ((key === "p") || (deviceShaken())) {
       mysong.play();
       death = true
   }
