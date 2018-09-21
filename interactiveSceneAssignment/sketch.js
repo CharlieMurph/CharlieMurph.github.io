@@ -9,32 +9,31 @@ let mysong;
 let smash;
 let x, y;
 let dx, dy;
-let sheet;
+let scalar;
+let death;
 
 function preload() {
   mysong = loadSound("assets/allstar.mp3");
-  mysong.setVolume(100);
+  mysong.setVolume(80);
   smash = loadImage("assets/smash.png");
 }
 
+//Responsive keys
 function keyTyped() {
   if (key === "w") {
-    sheet == (255);
+    placeEllipse();
+
   }
   else if (key === "b") {
-    sheet = (0);
+
   }
   else if (key === "p") {
-    if (mysong.isPlaying()) {
-      mysong.pause();
-    }
-    else {
       mysong.play();
-      mysong.loop();
-    }
+      death = true
   }
 }
 
+//Smashmouth image bouncing around screen
 function movesmash() {
   x += dx
   y += dy
@@ -46,27 +45,40 @@ function movesmash() {
   }
 }
 
+//Resizes window
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
+//displays smashmouth
 function displaysmash() {
-  // background(sheet);
+  background(random(255), random(255), random(255));
   image(smash, x, y);
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(55);
+  textAlign(CENTER)
+  textSize(50)
   x = width / 2 - smash.width / 2;
   y = height / 2 - smash.height / 2;
   dx = random(2, 8)
   dy = random(2, 8)
+
+}
+
+function placeEllipse() {
+  ellipse(mouseX,mouseY,50)
 }
 
 function draw() {
- keyTyped();
- displaysmash();
- movesmash();
-
+ if (death) {
+   displaysmash();
+   movesmash();
+   text("There is no escape", width / 2, height / 2);
+ }
+else {
+  keyTyped();
+  text("Please hit W or P", width / 2, height / 2);
+}
 }
