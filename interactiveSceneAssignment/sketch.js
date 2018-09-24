@@ -9,9 +9,11 @@ let mysong;
 let smash;
 let x, y;
 let dx, dy;
-let shake = false;
+// let shake = false;
 let death;
+let ellipseWidth;
 
+// Preloading images/sounds
 function preload() {
   mysong = loadSound("assets/allstar.mp3");
   mysong.setVolume(80);
@@ -24,15 +26,15 @@ function keyTyped() {
     placeEllipse();
 
   }
-  else if ((key === "p") || (shake)) {
+  else if (key === "p") {
       mysong.play();
       death = true
   }
 }
 
-function deviceShaken() {
-  return shake
-}
+// function deviceShaken() {
+//   return shake
+// }
 
 //Smashmouth image bouncing around screen
 function movesmash() {
@@ -59,17 +61,31 @@ function displaysmash() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  background(255);
   textAlign(CENTER)
   textSize(50)
   x = width / 2 - smash.width / 2;
   y = height / 2 - smash.height / 2;
   dx = random(2, 8)
   dy = random(2, 8)
+  ellipseWidth = 20;
+  death = false;
 
 }
 
+function mouseWheel(event) {
+  if (event.deltaY < 0) {
+    ellipseWidth += 10;
+  }
+  else if (event.deltaY > 0) {
+    ellipseWidth -= 10;
+  }
+  console.log(event)
+}
+
 function placeEllipse() {
-  ellipse(mouseX,mouseY,50)
+  // mouseWheel();
+  ellipse(mouseX, mouseY, ellipseWidth);
 }
 
 function draw() {
@@ -78,8 +94,8 @@ function draw() {
    movesmash();
    text("There is no escape", width / 2, height / 2);
  }
-else {
-  keyTyped();
-  text("Please hit W or P", width / 2, height / 2);
-}
+ else {
+   text("Please hit W or P", width / 2, height / 2);
+ }
+// keyTyped();
 }
