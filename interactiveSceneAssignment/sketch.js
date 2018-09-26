@@ -9,7 +9,6 @@ let mysong;
 let smash;
 let x, y;
 let dx, dy;
-// let shake = false;
 let death;
 let ellipseWidth;
 
@@ -31,10 +30,6 @@ function keyTyped() {
       death = true
   }
 }
-
-// function deviceShaken() {
-//   return shake
-// }
 
 //Smashmouth image bouncing around screen
 function movesmash() {
@@ -70,7 +65,6 @@ function setup() {
   dy = random(2, 8)
   ellipseWidth = 20;
   death = false;
-
 }
 
 function mouseWheel(event) {
@@ -84,7 +78,6 @@ function mouseWheel(event) {
 }
 
 function placeEllipse() {
-  // mouseWheel();
   ellipse(mouseX, mouseY, ellipseWidth);
 }
 
@@ -97,5 +90,4 @@ function draw() {
  else {
    text("Please hit W or P", width / 2, height / 2);
  }
-// keyTyped();
 }
