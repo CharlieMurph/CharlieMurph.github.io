@@ -39,17 +39,24 @@ function displayButton1() {
   fill(100, 200, 0);
   strokeWeight(5);
   stroke(255, 0, 0);
-  rect(windowWidth / 2 - BUTTON_WIDTH/ 2, windowHeight / 2 + BUTTON_HEIGHT, BUTTON_WIDTH,BUTTON_HEIGHT);
+  rect(windowWidth / 2 - BUTTON_WIDTH/ 2, windowHeight / 2 - BUTTON_HEIGHT, BUTTON_WIDTH,BUTTON_HEIGHT);
   fill (0);
-  strokeWeight(10);
-  text("Game 1",windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
+  noStroke();
+  textSize(32);
+  textAlign(CENTER);
+  text("Game 1", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT /2);
 }
 
 function displayButton2() {
   fill(100, 200, 0);
   strokeWeight(5);
   stroke(255, 0, 0);
-  rect(windowWidth / 2 - BUTTON_WIDTH/ 2, windowHeight / 2 - BUTTON_HEIGHT, BUTTON_WIDTH,BUTTON_HEIGHT);
+  rect(windowWidth / 2 - BUTTON_WIDTH/ 2, windowHeight / 2 + BUTTON_HEIGHT, BUTTON_WIDTH,BUTTON_HEIGHT);
+  fill (0);
+  noStroke();
+  textSize(32);
+  textAlign(CENTER);
+  text("Game 2", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 + BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT /2);
 }
 
 function mouseReticle() {
