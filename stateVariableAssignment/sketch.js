@@ -35,11 +35,9 @@ function displayMainMenu() {
   displayButton2();
   if (buttonHover() === 1) {
     displayButton1Alt();
-    text("BUTTONONE", windowWidth/ 2, windowHeight/ 2);
   }
   else if (buttonHover() === 2){
     displayButton2Alt();
-    text("BUTTONTWO", windowWidth/ 2, windowHeight/ 2);
   }
 }
 
@@ -52,7 +50,7 @@ function displayButton1() {
   noStroke();
   textSize(32);
   textAlign(CENTER);
-  text("Game 1", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT /2);
+  text("Game 1", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 - BUTTON_HEIGHT + 30, BUTTON_WIDTH, BUTTON_HEIGHT /2);
 }
 
 function displayButton1Alt() {
@@ -64,7 +62,7 @@ function displayButton1Alt() {
   noStroke();
   textSize(32);
   textAlign(CENTER);
-  text("Game 1", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT /2);
+  text("Game 1", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 - BUTTON_HEIGHT + 30, BUTTON_WIDTH, BUTTON_HEIGHT /2);
 }
 
 function displayButton2() {
@@ -76,7 +74,7 @@ function displayButton2() {
   noStroke();
   textSize(32);
   textAlign(CENTER);
-  text("Game 2", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 + BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT /2);
+  text("Game 2", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 + BUTTON_HEIGHT + 30, BUTTON_WIDTH, BUTTON_HEIGHT /2);
 }
 
 function displayButton2Alt() {
@@ -88,7 +86,7 @@ function displayButton2Alt() {
   noStroke();
   textSize(32);
   textAlign(CENTER);
-  text("Game 2", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 + BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT /2);
+  text("Game 2", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 + BUTTON_HEIGHT + 30, BUTTON_WIDTH, BUTTON_HEIGHT /2);
 }
 
 function mouseReticle() {
@@ -106,13 +104,12 @@ function mouseReticle() {
 function buttonHover() {
   if (windowWidth / 2 - BUTTON_WIDTH/ 2 <= mouseX && windowWidth / 2 + BUTTON_WIDTH / 2 >= mouseX) {
     // Hovering over button 1
-    if (mouseY > windowHeight / 2 - BUTTON_HEIGHT && mouseY > windowHeight / 2 - BUTTON_HEIGHT / 2) {
+    if (windowHeight / 2 - BUTTON_HEIGHT <= mouseY && windowHeight / 2 >= mouseY) {
       return 1;
     }
     // Hovering over button 2
-    // else if (mouseY > windowHeight / 2 + BUTTON_HEIGHT && mouseY < windowHeight / 2) {
-    //   return 2;
-    // }
+    else if (windowHeight / 2 + BUTTON_HEIGHT * 2 >= mouseY && windowHeight / 2 + BUTTON_HEIGHT <= mouseY) {
+      return 2;
+    }
   }
 }
-// FINISH SETTING BOUNDARIES FOR BUTTONS
