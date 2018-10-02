@@ -27,6 +27,9 @@ function determineState() {
   if (state === 0) {
     displayMainMenu();
   }
+  else if (state === 1) {
+    displaySmashMouth();
+  }
 }
 
 function displayMainMenu() {
@@ -39,6 +42,7 @@ function displayMainMenu() {
   else if (buttonHover() === 2){
     displayButton2Alt();
   }
+  // Add in "if mouseisclicked()"
 }
 
 function displayButton1() {
@@ -112,4 +116,10 @@ function buttonHover() {
       return 2;
     }
   }
+}
+
+function displaySmashMouth() {
+  textAlign(CENTER);
+  textSize(20);
+  text("Work in Progress..... Coming soon I hope.", CENTER, CENTER);
 }
