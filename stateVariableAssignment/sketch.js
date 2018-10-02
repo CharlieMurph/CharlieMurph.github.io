@@ -33,12 +33,32 @@ function displayMainMenu() {
   background(100);
   displayButton1();
   displayButton2();
+  if (buttonHover() === 1) {
+    displayButton1Alt();
+    text("BUTTONONE", windowWidth/ 2, windowHeight/ 2);
+  }
+  else if (buttonHover() === 2){
+    displayButton2Alt();
+    text("BUTTONTWO", windowWidth/ 2, windowHeight/ 2);
+  }
 }
 
 function displayButton1() {
   fill(100, 200, 0);
   strokeWeight(5);
   stroke(255, 0, 0);
+  rect(windowWidth / 2 - BUTTON_WIDTH/ 2, windowHeight / 2 - BUTTON_HEIGHT, BUTTON_WIDTH,BUTTON_HEIGHT);
+  fill (0);
+  noStroke();
+  textSize(32);
+  textAlign(CENTER);
+  text("Game 1", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT /2);
+}
+
+function displayButton1Alt() {
+  fill(255, 0, 0);
+  strokeWeight(5);
+  stroke(100, 200, 0);
   rect(windowWidth / 2 - BUTTON_WIDTH/ 2, windowHeight / 2 - BUTTON_HEIGHT, BUTTON_WIDTH,BUTTON_HEIGHT);
   fill (0);
   noStroke();
@@ -59,6 +79,18 @@ function displayButton2() {
   text("Game 2", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 + BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT /2);
 }
 
+function displayButton2Alt() {
+  fill(255, 0, 0);
+  strokeWeight(5);
+  stroke(100, 200, 0);
+  rect(windowWidth / 2 - BUTTON_WIDTH/ 2, windowHeight / 2 + BUTTON_HEIGHT, BUTTON_WIDTH,BUTTON_HEIGHT);
+  fill (0);
+  noStroke();
+  textSize(32);
+  textAlign(CENTER);
+  text("Game 2", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 + BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT /2);
+}
+
 function mouseReticle() {
   diameter = 40;
   sliceWidth = diameter/ 4;
@@ -70,3 +102,17 @@ function mouseReticle() {
     diameter -= sliceWidth;
   }
 }
+
+function buttonHover() {
+  if (windowWidth / 2 - BUTTON_WIDTH/ 2 <= mouseX && windowWidth / 2 + BUTTON_WIDTH / 2 >= mouseX) {
+    // Hovering over button 1
+    if (mouseY > windowHeight / 2 - BUTTON_HEIGHT && mouseY > windowHeight / 2 - BUTTON_HEIGHT / 2) {
+      return 1;
+    }
+    // Hovering over button 2
+    // else if (mouseY > windowHeight / 2 + BUTTON_HEIGHT && mouseY < windowHeight / 2) {
+    //   return 2;
+    // }
+  }
+}
+// FINISH SETTING BOUNDARIES FOR BUTTONS
