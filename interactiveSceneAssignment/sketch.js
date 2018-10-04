@@ -2,13 +2,13 @@
 // Your Name
 // Date
 //
-// Extra for Experts:
+// Ehorizontaltra for Ehorizontalperts:
 // - describe what you did to take this project "above and beyond"
 
 let mysong;
 let smash;
-let x, y;
-let dx, dy;
+let horizontal, verticle;
+let dhorizontal, dverticle;
 let death;
 let ellipseWidth;
 
@@ -33,13 +33,13 @@ function keyTyped() {
 
 //Smashmouth image bouncing around screen
 function movesmash() {
-  x += dx
-  y += dy
-  if (x + smash.width > width || x < 0) {
-    dx = dx * -1
+  horizontal += dhorizontal
+  verticle += dverticle
+  if (horizontal + smash.width > width || horizontal < 0) {
+    dhorizontal = dhorizontal * -1
   }
-  else if (y + smash.height > height || y < 0) {
-    dy = dy * -1
+  else if (verticle + smash.height > height || y < 0) {
+    dverticle = dverticle * -1
   }
 }
 
@@ -51,7 +51,7 @@ function windowResized() {
 //displays smashmouth
 function displaysmash() {
   background(random(255), random(255), random(255));
-  image(smash, x, y);
+  image(smash, horizontal, verticle);
 }
 
 function setup() {
@@ -59,10 +59,10 @@ function setup() {
   background(255);
   textAlign(CENTER)
   textSize(50)
-  x = width / 2 - smash.width / 2;
-  y = height / 2 - smash.height / 2;
-  dx = random(2, 8)
-  dy = random(2, 8)
+  horizontal = width / 2 - smash.width / 2;
+  verticle = height / 2 - smash.height / 2;
+  dhorizontal = random(2, 8)
+  dverticle = random(2, 8)
   ellipseWidth = 20;
   death = false;
 }
@@ -81,13 +81,17 @@ function placeEllipse() {
   ellipse(mouseX, mouseY, ellipseWidth);
 }
 
+function mainOptions() {
+  if (death) {
+    displaysmash();
+    movesmash();
+    text("There is no escape", width / 2, height / 2);
+  }
+  else {
+    text("Please hit W or P", width / 2, height / 2);
+  }
+}
+
 function draw() {
- if (death) {
-   displaysmash();
-   movesmash();
-   text("There is no escape", width / 2, height / 2);
- }
- else {
-   text("Please hit W or P", width / 2, height / 2);
- }
+ mainOptions();
 }
