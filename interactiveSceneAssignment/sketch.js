@@ -89,6 +89,7 @@ function mainOptions() {
   }
   else {
     text("Please hit W or P", width / 2, height / 2);
+    keyTyped();
   }
 }
 
