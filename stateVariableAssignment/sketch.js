@@ -20,12 +20,14 @@ function setup() {
 
 function draw() {
   determineState();
-  mouseReticle();
+  // mouseReticle();
 }
 
 function determineState() {
+  background (255);
   if (state === 0) {
     displayMainMenu();
+    mouseReticle();
   }
   else if (state === 1) {
     mainOptions();
