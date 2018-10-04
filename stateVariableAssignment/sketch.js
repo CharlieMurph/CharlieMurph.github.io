@@ -28,7 +28,7 @@ function determineState() {
     displayMainMenu();
   }
   else if (state === 1) {
-    displaySmashMouth();
+    mainOptions();
   }
 }
 
@@ -67,6 +67,9 @@ function displayButton1Alt() {
   textSize(32);
   textAlign(CENTER);
   text("Game 1", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 - BUTTON_HEIGHT + 30, BUTTON_WIDTH, BUTTON_HEIGHT /2);
+  if (mouseIsPressed) {
+    state = 1;
+  }
 }
 
 function displayButton2() {
