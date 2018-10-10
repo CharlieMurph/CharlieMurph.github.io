@@ -13,6 +13,7 @@ let x, y;
 let mouseReticleColour = ["white", "red", "white", "red"];
 let i;
 
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   state = 0;
@@ -20,7 +21,7 @@ function setup() {
 
 function draw() {
   determineState();
-  // mouseReticle();
+  mouseReticle();
 }
 
 function determineState() {
@@ -31,6 +32,11 @@ function determineState() {
   }
   else if (state === 1) {
     mainOptions();
+    returnToMainMenu();
+  }
+  else if (state === 2) {
+    displaySmashMouth();
+    returnToMainMenu();
   }
 }
 
@@ -44,7 +50,6 @@ function displayMainMenu() {
   else if (buttonHover() === 2){
     displayButton2Alt();
   }
-  // Add in "if mouseisclicked()"
 }
 
 function displayButton1() {
@@ -96,6 +101,9 @@ function displayButton2Alt() {
   textSize(32);
   textAlign(CENTER);
   text("Game 2", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 + BUTTON_HEIGHT + 30, BUTTON_WIDTH, BUTTON_HEIGHT /2);
+  if (mouseIsPressed) {
+    state = 2;
+  }
 }
 
 function mouseReticle() {
@@ -126,5 +134,28 @@ function buttonHover() {
 function displaySmashMouth() {
   textAlign(CENTER);
   textSize(20);
-  text("Work in Progress..... Coming soon I hope.", CENTER, CENTER);
+  text("Work in Progress..... Coming soon..... I hope.", windowWidth / 2, windowHeight / 2);
+  returnToMainMenu();
+}
+
+function returnToMainMenu() {
+  fill(0, 0, 255);
+  rect(20, 0, 100, 50);
+  if (20 <= mouseX && 120 >= mouseX) {
+    if (0 <= mouseY && 50 >= mouseY){
+      fill(255);
+      rect (20, 0, 100, 50);
+      if (mouseIsPressed) {
+        state = 0;
+      }
+    }
+  }
+  textSize(18);
+  fill(0);
+  text("Main Menu",70,35);
+  return state;
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
