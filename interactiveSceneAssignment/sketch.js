@@ -11,6 +11,7 @@ let horizontal, verticle;
 let dhorizontal, dverticle;
 let death;
 let ellipseWidth;
+let ellipseArray = [];
 
 // Preloading images/sounds
 function preload() {
@@ -79,19 +80,35 @@ function mouseWheel(event) {
 
 function placeEllipse() {
   ellipse(mouseX, mouseY, ellipseWidth);
+  let thisEllipse = {
+    x: mouseX,
+    y: mouseY,
+    radius: 30
+  };
+  ellipseArray.push(thisEllipse);
 }
 
 function mainOptions() {
   if (death) {
     displaysmash();
     movesmash();
+    textSize(50);
     text("There is no escape", width / 2, height / 2);
   }
   else {
+    textSize(50);
     text("Please hit W or P", width / 2, height / 2);
     keyTyped();
+    displayEllipses()
   }
 }
+
+function displayEllipses() {
+  for (let c = 0; c < ellipseArray.length; c++) {
+    ellipse (ellipseArray[c].x, ellipseArray[c].y, ellipseArray[c].radius*2, ellipseArray[c].radius*2);
+  }
+}
+
 
 function draw() {
  mainOptions();
