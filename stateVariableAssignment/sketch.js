@@ -1,9 +1,11 @@
-// Project Title
-// Your Name
-// Date
+// State Variable Assignment
+// Charlie Murphy
+// Oct. 15, 2018
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// - The State variable is required to allow the movement from the "main menu"
+//  to another page and back. The Extra for Experts is found in the header of
+//  my project, the array used to create ellipses
 
 let state;
 const BUTTON_WIDTH = 200;
@@ -24,6 +26,7 @@ function draw() {
   mouseReticle();
 }
 
+// checks the state of code and adjusts sketch based on the state
 function determineState() {
   background (255);
   if (state === 0) {
@@ -35,11 +38,12 @@ function determineState() {
     returnToMainMenu();
   }
   else if (state === 2) {
-    displaySmashMouth();
+    acknowledgeButton2Works();
     returnToMainMenu();
   }
 }
 
+// displays the main menu
 function displayMainMenu() {
   background(100);
   displayButton1();
@@ -52,6 +56,7 @@ function displayMainMenu() {
   }
 }
 
+// displays the first button
 function displayButton1() {
   fill(100, 200, 0);
   strokeWeight(5);
@@ -64,6 +69,7 @@ function displayButton1() {
   text("Game 1", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 - BUTTON_HEIGHT + 30, BUTTON_WIDTH, BUTTON_HEIGHT /2);
 }
 
+// changes original Button 1 to display when it is being hovered over
 function displayButton1Alt() {
   fill(255, 0, 0);
   strokeWeight(5);
@@ -79,6 +85,7 @@ function displayButton1Alt() {
   }
 }
 
+// displays the second button
 function displayButton2() {
   fill(100, 200, 0);
   strokeWeight(5);
@@ -91,6 +98,7 @@ function displayButton2() {
   text("Game 2", windowWidth / 2 - BUTTON_WIDTH / 2, windowHeight / 2 + BUTTON_HEIGHT + 30, BUTTON_WIDTH, BUTTON_HEIGHT /2);
 }
 
+// changes original Button 2 to display when it is being hovered over
 function displayButton2Alt() {
   fill(255, 0, 0);
   strokeWeight(5);
@@ -106,6 +114,7 @@ function displayButton2Alt() {
   }
 }
 
+// creates the mouse reticle
 function mouseReticle() {
   diameter = 40;
   sliceWidth = diameter/ 4;
@@ -118,6 +127,7 @@ function mouseReticle() {
   }
 }
 
+// Determines whether the mouse is within boundaries of the Buttons, and which button it is over top of
 function buttonHover() {
   if (windowWidth / 2 - BUTTON_WIDTH/ 2 <= mouseX && windowWidth / 2 + BUTTON_WIDTH / 2 >= mouseX) {
     // Hovering over button 1
@@ -131,13 +141,14 @@ function buttonHover() {
   }
 }
 
-function displaySmashMouth() {
+function acknowledgeButton2Works() {
   textAlign(CENTER);
   textSize(20);
   text("Work in Progress..... Coming soon..... I hope.", windowWidth / 2, windowHeight / 2);
   returnToMainMenu();
 }
 
+// Draws the "Main Menu" button in the top left corner
 function returnToMainMenu() {
   fill(0, 0, 255);
   rect(20, 0, 100, 50);
@@ -156,6 +167,7 @@ function returnToMainMenu() {
   return state;
 }
 
+// Readjusts the location of items on the screen based on the window sizw
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
