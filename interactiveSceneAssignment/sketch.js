@@ -2,7 +2,7 @@
 // Your Name
 // Date
 //
-// Ehorizontaltra for Ehorizontalperts:
+// Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
 let mysong;
@@ -16,43 +16,8 @@ let ellipseArray = [];
 // Preloading images/sounds
 function preload() {
   mysong = loadSound("assets/allstar.mp3");
-  mysong.setVolume(80);
+  mysong.setVolume(0);
   smash = loadImage("assets/smash.png");
-}
-
-//Responsive keys
-function keyTyped() {
-  if (key === "w") {
-    placeEllipse();
-
-  }
-  else if (key === "p") {
-      mysong.play();
-      death = true
-  }
-}
-
-//Smashmouth image bouncing around screen
-function movesmash() {
-  horizontal += dhorizontal
-  verticle += dverticle
-  if (horizontal + smash.width > width || horizontal < 0) {
-    dhorizontal = dhorizontal * -1
-  }
-  else if (verticle + smash.height > height || y < 0) {
-    dverticle = dverticle * -1
-  }
-}
-
-//Resizes window
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
-
-//displays smashmouth
-function displaysmash() {
-  background(random(255), random(255), random(255));
-  image(smash, horizontal, verticle);
 }
 
 function setup() {
@@ -66,6 +31,43 @@ function setup() {
   dverticle = random(2, 8)
   ellipseWidth = 20;
   death = false;
+}
+
+//Responsive keys
+function keyTyped() {
+  if (key === "w") {
+    placeEllipse();
+  }
+  else if (key === "p") {
+      mysong.play();
+      death = true
+  }
+  else if (keyCode === 32 ) {
+    ellipseArray = [];
+  }
+}
+
+//Smashmouth image bouncing around screen
+function movesmash() {
+  horizontal += dhorizontal
+  verticle += dverticle
+  if (horizontal + smash.width > width || horizontal < 0) {
+    dhorizontal = dhorizontal * -1
+  }
+  else if (verticle + smash.height > height || verticle < 0) {
+    dverticle = dverticle * -1
+  }
+}
+
+//Resizes window
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
+//displays smashmouth
+function displaysmash() {
+  background(random(255), random(255), random(255));
+  image(smash, horizontal, verticle);
 }
 
 function mouseWheel(event) {
@@ -90,14 +92,15 @@ function placeEllipse() {
 
 function mainOptions() {
   if (death) {
+    // for (let i = 0; i > 0, i++)
     displaysmash();
     movesmash();
     textSize(50);
     text("There is no escape", width / 2, height / 2);
   }
-  else {
+  else if (!death) {
     textSize(50);
-    text("Please hit W or P", width / 2, height / 2);
+    text("Please hit W, P or SPACE to clear", width / 2, height / 2);
     keyTyped();
     displayEllipses()
   }
