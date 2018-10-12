@@ -14,6 +14,8 @@ let diameter, sliceWidth;
 let x, y;
 let mouseReticleColour = ["white", "red", "white", "red"];
 let i;
+// for paddle game:
+let y2 = windowHeight / 2;
 
 
 function setup() {
@@ -145,7 +147,9 @@ function acknowledgeButton2Works() {
   textAlign(CENTER);
   textSize(20);
   text("Work in Progress..... Coming soon..... I hope.", windowWidth / 2, windowHeight / 2);
-  returnToMainMenu();
+  // playerPaddle();
+  // returnToMainMenu();
+  playerPaddle();
 }
 
 // Draws the "Main Menu" button in the top left corner
@@ -170,4 +174,18 @@ function returnToMainMenu() {
 // Readjusts the location of items on the screen based on the window sizw
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+}
+
+function playerPaddle() {
+  fill(random(255), random(255), random(255));
+  rect(0,y2 - 50, 20, 50);
+  if (keyIsPressed) {
+    if (keyCode === 38) {
+      y2 -= 20;
+    }
+    else if (keyCode === 40) {
+      y2 += 20;
+    }
+  }
+
 }
