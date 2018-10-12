@@ -43,7 +43,7 @@ function keyTyped() {
       death = true
   }
   else if (keyCode === 32 ) {
-    ellipseArray = [];
+    return ellipseArray = [];
   }
 }
 
