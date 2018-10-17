@@ -5,7 +5,7 @@
 // Extra for Experts:
 // - The State variable is required to allow the movement from the "main menu"
 //  to another page and back. The Extra for Experts is found in the header of
-//  my project, the array used to create ellipses
+//  my project and the the array used to create ellipses.
 
 let state;
 const BUTTON_WIDTH = 200;
@@ -158,6 +158,7 @@ function returnToMainMenu() {
       rect (20, 0, 100, 50);
       if (mouseIsPressed) {
         state = 0;
+        return death = false;
       }
     }
   }
