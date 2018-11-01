@@ -45,7 +45,7 @@ function piecesArray() {
     for (j = 0; j < rows; j++) {
       if (second === true) {
         fill (255, 0, 0);
-        ellipse (, , 10, 10);
+        ellipse (j,i , 10, 10);
       }
       else {
         second = !second;
