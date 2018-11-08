@@ -7,6 +7,8 @@ let grid;
 let cellSize;
 let color = ["2", "3"];
 let counter;
+let score;
+let red, yellow;
 
 function preload() {
   grid = loadStrings("assets/grid3.txt");
@@ -26,7 +28,7 @@ function draw() {
   background(255);
   displayGrid();
   playGame();
-  checkWin();
+  displayWin(); // Coming soonish
 }
 
 //allows the text file to be used for initial grid
@@ -115,4 +117,76 @@ function playGame() {
     }
   }
   return grid;
+}
+
+//Getting an error from the vertical win portion of code
+function checkWin() {
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      for (let i = 0; i < color.length; i++) {
+        let horizontalFour = 0;
+        let verticalFour = 0;
+        let diagonalFour1 = 0;
+        let diagonalFour2 = 0;
+        for (let j = 0; j < 4; j++) {
+          // Check horizontal win
+          if (grid[y][x + j] === color[i]) {
+            horizontalFour++;
+            if (horizontalFour === 4) {
+              return color[i];
+            }
+          }
+        }
+        // Check Vertical win
+        for (let j = 0; j < 4; j++) {
+          if (y + j < 7) {
+            if (grid[y + j][x] === color[i]) {
+              verticalFour++;
+              if (verticalFour === 4) {
+                return color[i];
+              }
+            }
+            // Check diagonally negative (left/up - right/down)
+            if (x + j < 7) {
+              if (grid[y + j][x + j] === color[i]) {
+                diagonalFour1++;
+                if (diagonalFour1 === 4) {
+                  return color[i];
+                }
+              }
+            }
+          }
+          //  Check diagonally positive (left/down - right/up)
+          if (y + j < 7 && x - j >= 0) {
+            if (grid[y + j][x - j] === color[i]) {
+              diagonalFour2++;
+              if (diagonalFour2 === 4) {
+                return color[i];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+function displayWin() {
+  checkWin();
+  textSize(20);
+  noStroke();
+  // Yellow
+  if (checkWin() === "2") {
+    background(0);
+    stroke(255, 255, 0);
+    fill(255);
+    text("Congratulations Yellow you have won...  woohoo",150 ,700 / 3);
+  }
+  // Red
+  else if (checkWin() === "3") {
+    background(0);
+    stroke(255, 0, 0);
+    fill(255);
+    text("Congratulations Red you have won... woohoo",150 ,700 / 3);
+  }
 }
