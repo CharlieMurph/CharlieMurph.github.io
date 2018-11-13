@@ -3,15 +3,16 @@
 // Date
 let rows;
 let cols;
+let sound;
 let grid;
 let cellSize;
 let color = ["2", "3"];
 let counter;
-let score;
 let red, yellow;
 
 function preload() {
   grid = loadStrings("assets/grid3.txt");
+  sound = loadSound("assets/winSoundEffect.mp4");
 }
 
 function setup() {
@@ -28,7 +29,7 @@ function draw() {
   background(255);
   displayGrid();
   playGame();
-  displayWin(); // Coming soonish
+  displayWin();
 }
 
 //allows the text file to be used for initial grid
@@ -81,12 +82,14 @@ function displayGrid() {
 //placing pieces, alternating red and yellow each time
 function mouseClicked() {
   let x = floor(mouseX / cellSize);
+  // Place yellow
   if (counter === true) {
     if (grid[1][x] === "0") {
       grid[1][x] = "2";
       counter = !counter;
     }
   }
+  // Place Red
   else {
     if (grid[1][x] === "0") {
       grid[1][x] = "3";
@@ -119,7 +122,7 @@ function playGame() {
   return grid;
 }
 
-//Getting an error from the vertical win portion of code
+//Checks if either player wins
 function checkWin() {
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
@@ -171,6 +174,7 @@ function checkWin() {
   }
 }
 
+//Displays on screen if a player wins, and who
 function displayWin() {
   checkWin();
   textSize(20);
@@ -181,6 +185,7 @@ function displayWin() {
     stroke(255, 255, 0);
     fill(255);
     text("Congratulations Yellow you have won...  woohoo",150 ,700 / 3);
+    sound.play();
   }
   // Red
   else if (checkWin() === "3") {
@@ -188,5 +193,6 @@ function displayWin() {
     stroke(255, 0, 0);
     fill(255);
     text("Congratulations Red you have won... woohoo",150 ,700 / 3);
+    sound.play();
   }
 }
