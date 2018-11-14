@@ -1,6 +1,8 @@
-// Project Title
-// Your Name
-// Date
+// Connect Four
+// Charlie Murphy
+// Nov. 13, 2018
+//
+// 
 let rows;
 let cols;
 let sound;
