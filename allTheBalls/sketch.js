@@ -1,61 +1,79 @@
-// Project Title
-// Your Name
-// Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// Ball OOP Demo
+// Dan Schellenberg
 
 class Ball {
-  constructor(x ,y) {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = 25;
-    this.dx = random (-10, 10);
-    this.dy = random (-10, 10);
-    this.transparency = 255;
-    this.color = color(random(255), random(255), random(255), this.transparency);
+    this.radius = 50;
+    this.dx = random(-10, 10);
+    this.dy = random(-10, 10);
+    this.color = color(random(255), random(255), random(255), 120);
+    this.isCollidingRightNow = false;
   }
 
   display() {
     noStroke();
-    fill(this.color);
-    ellipse(this.x, this.y, this.size, this.size);
+    if (this.isCollidingRightNow) {
+      fill(255, 0, 0, 255);
+    }
+    else {
+      fill(this.color);
+    }
+    ellipse(this.x, this.y, this.radius*2, this.radius*2);
   }
 
   update() {
-    // this.transparency -= 5;
-    // this.color.setAlpha(this.transparency);
-    if (this.x < windowWidth - 25 && this.x > 25) {
-      this.x *= -1;
-    }
-    else if (this.y === 0 + 25 || this.y === windowHeight - 25) {
-      this.x *= -1;
-    }
     this.x += this.dx;
     this.y += this.dy;
 
+    if (this.y <= 0 + this.radius || this.y >= height - this.radius) {
+      this.dy *= -1;
+    }
+    if (this.x <= 0 + this.radius || this.x >= width - this.radius) {
+      this.dx *= -1;
+    }
+  }
 
+  checkForCollision(otherBall) {
+    if (dist(this.x, this.y, otherBall.x, otherBall.y) <= this.radius + otherBall.radius) {
+      // the balls are colliding!!
+      this.isCollidingRightNow = true;
+      let tempDx = this.dx;
+      let tempDy = this.dy;
+      this.dx = otherBall.dx;
+      this.dy = otherBall.dy;
+      otherBall.dx = tempDx;
+      otherBall.dy = tempDy;
 
+    }
   }
 }
 
-let someParticle;
-let balls = [];
+let ballArray = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  for (let i = 0; i < 35; i++) {
-    let soManyBalls = new Ball(random(500), random(600));
-    balls.push(soManyBalls);
 
-  }
 }
 
 function draw() {
   background(0);
+  for (let i = ballArray.length - 1; i >= 0; i--) {
+    ballArray[i].isCollidingRightNow = false;
+    for (let j = 0; j < ballArray.length; j++) {
+      if (i !== j) {  //don't check collision against self...
+        ballArray[i].checkForCollision(ballArray[j]);
+      }
+    }
+    ballArray[i].update();
+    ballArray[i].display();
+  }
+}
 
-  for (let i = 0; i < balls.length; i++) {
-    balls[i].update();
-    balls[i].display();
+function mousePressed() {
+  for (let i = 0; i < 1; i++) {
+    let someBall = new Ball(mouseX, mouseY);
+    ballArray.push(someBall);
   }
 }
