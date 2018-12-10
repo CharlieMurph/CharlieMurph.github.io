@@ -1,17 +1,17 @@
 # **Proposal**
 
-I want to build a project that allows 2 people to play "Stratego"
+I want to build a project that allows someone to play "1942" fighter game
 
 #### **Need to have list:**
-- Functional map that is traversable
-- Different players with basic models
-- Different players have special movement capabilities
-- Players can initially place all Different players within their territory
-- Players can move, battle, die and win/lose game
-
+- smooth airplane movement
+- 2 version's of enemies
+- score
+- life count
+-
 #### **Nice to have list:**
-- More complex player models
-- Easy to play game
-- Main Menu
-- Pre-game instructions
-- AI
+- 2 types of weapons
+- death sequence
+- life bar
+- enemy explosion
+- textured background
+- powerups
