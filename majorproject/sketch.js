@@ -15,6 +15,10 @@ let y2;
 let lives;
 let score;
 let bulletArray;
+let enemyArray;
+let enemyX;
+let state;
+let spawn;
 
 
 // class Timer {
@@ -35,14 +39,45 @@ let bulletArray;
 // }
 
 class Bullet {
-  constructor(x, y){
+  constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.body = ellipse(this.x, this. y, 10, 10);
     this.dy = -5;
+    this.radius = 10;
 
   }
+  display() {
+    fill(255, 0, 0);
+    noStroke();
+    ellipse(this.x, this. y, this.radius, this.radius);
+  }
+  update() {
+    this.y += this.dy;
+  }
 
+  collision(fighter) {
+    if (dist(this.x, this.y, fighter.x, fighter.y) <= this.radius + fighter.radius) {
+
+    }
+  }
+
+}
+
+class Fighter {
+  constructor(x) {
+    this.x = x;
+    this.y = 50;
+    this.dy = random(1, 3);
+    this.radius = 30;
+  }
+  display() {
+    fill(40, 40, 90);
+    noStroke();
+    ellipse(this.x, this.y, this.radius, this.radius);
+  }
+  update() {
+    this.y += this.dy;
+  }
 }
 
 function preload() {
@@ -60,13 +95,19 @@ function setup() {
   lives = 3;
   score = 0;
   bulletArray = [];
+  enemyArray = [];
+  state = 1;
 }
 
 function draw() {
-  moveBackground();
-  playerPlane();
-  interface();
-
+  if (state === 1) {
+    moveBackground();
+    playerPlane();
+    shoot();
+    enemies();
+    hitDetection();
+    interface();
+  }
 
 }
 
@@ -92,7 +133,7 @@ function playerPlane() {
 
   // Go Right
   if (keyIsDown(68)) {
-    playerX = playerX + 7;
+    playerX = playerX + 5;
     if (playerX + 15 >= 700) {
       playerX = 25;
     }
@@ -100,27 +141,32 @@ function playerPlane() {
 
   // Go Left
   if (keyIsDown(65)) {
-    playerX = playerX - 7;
+    playerX = playerX - 5;
     if (playerX - 15 <= 0) {
       playerX = 675;
     }
   }
-  if (keyIsDown(32)) {
-    let bullet = new Bullet(playerX, playerY);
-    bulletArray.push(bullet);
-    for (let i = bulletArray.length - 1; i = 0; i--) {
-      bulletArray[i].y += bulletArray[i].dy;
+}
+
+function keyTyped() {
+  if (state === 1) {
+    if (key === " ") {
+      let bullet = new Bullet(playerX, playerY);
+      bulletArray.push(bullet);
     }
   }
 }
 
+
 function interface() {
+  // top and bottom borders
   fill(0);
   rect(0, 0, 700, 50);
   rect(0, 650, 700, 700);
   fill(255, 255, 0);
   textSize(45);
   textAlign(CENTER);
+  // on-screen text
   text("BOOM BOOM", width / 2, 40);
   textSize(28);
   textAlign(LEFT);
@@ -149,5 +195,42 @@ function moveBackground() {
   }
   if (y2 >= 650) {
     y2 = -600;
+  }
+}
+
+function shoot() {
+  // Bullets
+  for (let i = bulletArray.length - 1; i >= 0; i--) {
+    bulletArray[i].update();
+    bulletArray[i].display();
+    if (bulletArray[i].y < 20) {
+      bulletArray.splice(i, 1);
+    }
+  }
+}
+
+function enemies() {
+  spawn = random(1000);
+  enemyX = floor(random(50, 650));
+  if (spawn < 10) {
+    let enemy = new Fighter(enemyX);
+    enemyArray.push(enemy);
+  }
+  for (let i = enemyArray.length - 1; i >= 0; i--) {
+    enemyArray[i].update();
+    enemyArray[i].display();
+  }
+}
+
+function hitDetection() {
+  for (let i = bulletArray.length - 1; i >= 0; i--) {
+    for (let j = enemyArray.length - 1; i >= 0; i--) {
+      
+      if (bulletArray[i].collision(enemyArray[j]) === true) {
+        score += 10;
+        bulletArray.splice(i, 1);
+        enemyArray.splice(j, 1);
+      }
+    }
   }
 }
