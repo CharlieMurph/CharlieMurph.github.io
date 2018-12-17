@@ -1,4 +1,4 @@
-// Stratego
+// 1942 Shooter Game
 // Charlie Murphy
 // Dec. 07, 2019
 //
@@ -19,6 +19,7 @@ let enemyArray;
 let enemyX;
 let state;
 let spawn;
+let numberOfEnemies;
 
 
 // class Timer {
@@ -38,46 +39,50 @@ let spawn;
 //
 // }
 
-class Bullet {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.dy = -5;
-    this.radius = 10;
 
-  }
-  display() {
-    fill(255, 0, 0);
-    noStroke();
-    ellipse(this.x, this. y, this.radius, this.radius);
-  }
-  update() {
-    this.y += this.dy;
-  }
-
-  collision(fighter) {
-    if (dist(this.x, this.y, fighter.x, fighter.y) <= this.radius + fighter.radius) {
-
-    }
-  }
-
-}
 
 class Fighter {
   constructor(x) {
     this.x = x;
     this.y = 50;
     this.dy = random(1, 3);
-    this.radius = 30;
+    this.radius = 15;
   }
   display() {
     fill(40, 40, 90);
     noStroke();
-    ellipse(this.x, this.y, this.radius, this.radius);
+    ellipse(this.x, this.y, this.radius * 2, this.radius * 2);
   }
   update() {
     this.y += this.dy;
   }
+}
+
+class Bullet {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.dy = -5;
+    this.radius = 5;
+    this.color = color(255, 0, 0);
+    this.hitTarget = false;
+
+  }
+  display() {
+    fill(this.color);
+    noStroke();
+    ellipse(this.x, this. y, this.radius * 2, this.radius * 2);
+  }
+  update() {
+    this.y += this.dy;
+  }
+
+  collision(fighter) {
+    if (dist(this.x, this.y, fighter.x, fighter.y) <= this.radius + fighter.radius - 100) {
+      this.hitTarget = true;
+    }
+  }
+
 }
 
 function preload() {
@@ -104,8 +109,8 @@ function draw() {
     moveBackground();
     playerPlane();
     shoot();
-    enemies();
     hitDetection();
+    enemies();
     interface();
   }
 
@@ -203,18 +208,17 @@ function shoot() {
   for (let i = bulletArray.length - 1; i >= 0; i--) {
     bulletArray[i].update();
     bulletArray[i].display();
-    if (bulletArray[i].y < 20) {
-      bulletArray.splice(i, 1);
-    }
   }
 }
 
 function enemies() {
   spawn = random(1000);
   enemyX = floor(random(50, 650));
+  numberOfEnemies = 0;
   if (spawn < 10) {
     let enemy = new Fighter(enemyX);
     enemyArray.push(enemy);
+    numberOfEnemies += 1;
   }
   for (let i = enemyArray.length - 1; i >= 0; i--) {
     enemyArray[i].update();
@@ -223,13 +227,14 @@ function enemies() {
 }
 
 function hitDetection() {
-  for (let i = bulletArray.length - 1; i >= 0; i--) {
-    for (let j = enemyArray.length - 1; i >= 0; i--) {
-      
-      if (bulletArray[i].collision(enemyArray[j]) === true) {
-        score += 10;
-        bulletArray.splice(i, 1);
-        enemyArray.splice(j, 1);
+  if (numberOfEnemies > 0) {
+    for (let j = enemyArray.length - 1; j > 0; j--) {
+      for (let i = bulletArray.length - 1; i > 0; i--) {
+        bulletArray[i].collison(enemyArray[j]);
+        if (bulletArray[i].hitTarget) {
+          score += 10;
+          bulletArray.splice(i, 1);
+        }
       }
     }
   }
