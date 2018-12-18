@@ -65,7 +65,6 @@ class Bullet {
     this.dy = -5;
     this.radius = 5;
     this.color = color(255, 0, 0);
-    this.hitTarget = false;
 
   }
   display() {
@@ -75,12 +74,6 @@ class Bullet {
   }
   update() {
     this.y += this.dy;
-  }
-
-  collision(fighter) {
-    if (dist(this.x, this.y, fighter.x, fighter.y) <= this.radius + fighter.radius - 100) {
-      this.hitTarget = true;
-    }
   }
 
 }
@@ -109,8 +102,8 @@ function draw() {
     moveBackground();
     playerPlane();
     shoot();
-    hitDetection();
     enemies();
+    hitDetection();
     interface();
   }
 
@@ -212,8 +205,9 @@ function shoot() {
 }
 
 function enemies() {
-  spawn = random(1000);
-  enemyX = floor(random(50, 650));
+  spawn = random(100);
+  // enemyX = floor(random(50, 650));
+  enemyX = 350;
   numberOfEnemies = 0;
   if (spawn < 10) {
     let enemy = new Fighter(enemyX);
@@ -228,13 +222,22 @@ function enemies() {
 
 function hitDetection() {
   if (numberOfEnemies > 0) {
-    for (let j = enemyArray.length - 1; j > 0; j--) {
-      for (let i = bulletArray.length - 1; i > 0; i--) {
-        bulletArray[i].collison(enemyArray[j]);
-        if (bulletArray[i].hitTarget) {
+    for (let j = enemyArray.length - 1; j >= 0; j--) {
+      for (let i = bulletArray.length - 1; i >= 0; i--) {
+        if (collideCircleCircle(enemyArray[j].x, enemyArray[j].y, enemyArray[j].radius * 2, bulletArray[i].x, bulletArray[i].y, bulletArray[i].radius * 2)) {
           score += 10;
+          console.log(i, j, score);
+          console.log(bulletArray, enemyArray);
+          bulletArray.splice(i, 1);
+          enemyArray.splice(j, 1);
+          break;
+        }
+        else if (bulletArray[i].y < 50) {
           bulletArray.splice(i, 1);
         }
+      }
+      if (enemyArray[j].y > 650) {
+        enemyArray.splice(j, 1);
       }
     }
   }
