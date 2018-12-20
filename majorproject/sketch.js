@@ -7,6 +7,7 @@
 let playerX;
 let playerY;
 let ocean;
+let bullets;
 let backgroundY;
 let backgroundConstant;
 let backgroundSpeed;
@@ -20,6 +21,7 @@ let enemyX;
 let state;
 let spawn;
 let numberOfEnemies;
+let enemyPlane;
 
 
 // class Timer {
@@ -53,6 +55,7 @@ class Fighter {
     fill(40, 40, 90);
     noStroke();
     ellipse(this.x, this.y, this.radius * 2, this.radius * 2);
+    image(enemyPlane, this.x - 15, this.y - 20, 30, 40);
   }
   update() {
     this.y += this.dy;
@@ -65,7 +68,7 @@ class Bullet {
     this.y = y;
     this.dy = -5;
     this.radius = 5;
-    this.color = color(255, 0, 0);
+    this.color = color(255, 0, 0, 0);
     this.dead = false;
 
   }
@@ -73,6 +76,7 @@ class Bullet {
     fill(this.color);
     noStroke();
     ellipse(this.x, this. y, this.radius * 2, this.radius * 2);
+    image(bullets, this.x - 15, this.y - 20, 30, 40);
   }
   update() {
     this.y += this.dy;
@@ -83,6 +87,8 @@ class Bullet {
 function preload() {
   ocean = loadImage("assets/images.jfif");
   plane = loadImage("assets/images (1).png");
+  bullets = loadImage("assets/Fireball.png");
+  enemyPlane = loadImage("assets/fighterJet.png");
 }
 
 function setup() {
@@ -113,9 +119,10 @@ function draw() {
 }
 
 function playerPlane() {
-  fill(0);
-  ellipse(playerX, playerY, 30, 30, 255);
-  image(plane, playerX - 20, playerY - 18, 40, 40);
+  noStroke();
+  fill(0, 0, 0, 0);
+  ellipse(playerX, playerY, 30, 30);
+  image(plane, playerX - 20, playerY - 18, 40, 50);
 
 
   // Top Border
