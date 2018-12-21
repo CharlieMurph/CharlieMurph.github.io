@@ -22,7 +22,10 @@ let state;
 let spawn;
 let numberOfEnemies;
 let enemyPlane;
-
+let explosion;
+let fire;
+let enemyFireball;
+let enemyBulletArray;
 
 // class Timer {
 //   constructor(timeToWait) {
@@ -52,16 +55,44 @@ class Fighter {
     this.dead = false;
   }
   display() {
-    fill(40, 40, 90);
+    fill(40, 40, 90, 0);
     noStroke();
     ellipse(this.x, this.y, this.radius * 2, this.radius * 2);
-    image(enemyPlane, this.x - 15, this.y - 20, 30, 40);
+    image(enemyPlane, this.x - 17, this.y - 27, 40, 50);
+    if (this.dead === true) {
+      image(explosion, this.x - 15, this.y - 20, 30, 40);
+    }
   }
   update() {
     this.y += this.dy;
   }
+  shoot() {
+    let enemyBullet = new EnemyBullet(this.x, this.y);
+    enemyBulletArray.push(enemyBullet);
+  }
 }
 
+class EnemyBullet {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.dy = 7;
+    this.radius = 5;
+    this.color = color(255, 0, 0, 0);
+    this.dead = false;
+
+  }
+  display() {
+    fill(this.color);
+    noStroke();
+    ellipse(this.x, this. y, this.radius * 2, this.radius * 2);
+    image(enemyFireball, this.x - 15, this.y - 20, 30, 40);
+  }
+  update() {
+    this.y += this.dy;
+  }
+
+}
 class Bullet {
   constructor(x, y) {
     this.x = x;
@@ -89,6 +120,8 @@ function preload() {
   plane = loadImage("assets/images (1).png");
   bullets = loadImage("assets/Fireball.png");
   enemyPlane = loadImage("assets/fighterJet.png");
+  explosion = loadImage("assets/explosion.png");
+  enemyFireball = loadImage("assets/EnemyFireball.png");
 }
 
 function setup() {
@@ -103,6 +136,7 @@ function setup() {
   score = 0;
   bulletArray = [];
   enemyArray = [];
+  enemyBulletArray = [];
   state = 1;
 }
 
@@ -216,13 +250,17 @@ function shoot() {
     if (bulletArray[i].y < 50 || bulletArray[i].dead) {
       bulletArray.splice(i, 1);
     }
-
+  }
+  for (let i = enemyBulletArray.length - 1; i >= 0; i--) {
+    enemyBulletArray[i].update();
+    enemyBulletArray[i].display();
   }
 }
 
 function enemies() {
   // Spawns enemies
-  spawn = random(1000);
+  spawn = random(750);
+  fire = random(300);
   enemyX = floor(random(50, 650));
   if (spawn < 10) {
     let enemy = new Fighter(enemyX);
@@ -230,6 +268,9 @@ function enemies() {
   }
   // Moves/Removes enemies
   for (let i = enemyArray.length - 1; i >= 0; i--) {
+    if (fire < 9) {
+      enemyArray[i].shoot();
+    }
     enemyArray[i].update();
     enemyArray[i].display();
     if (enemyArray[i].y > 650 || enemyArray[i].dead) {
