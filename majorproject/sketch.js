@@ -26,6 +26,7 @@ let explosion;
 let fire;
 let enemyFireball;
 let enemyBulletArray;
+let playerDead;
 
 // class Timer {
 //   constructor(timeToWait) {
@@ -77,7 +78,7 @@ class EnemyBullet {
     this.x = x;
     this.y = y;
     this.dy = 7;
-    this.radius = 5;
+    this.radius = 13;
     this.color = color(255, 0, 0, 0);
     this.dead = false;
 
@@ -86,7 +87,7 @@ class EnemyBullet {
     fill(this.color);
     noStroke();
     ellipse(this.x, this. y, this.radius * 2, this.radius * 2);
-    image(enemyFireball, this.x - 15, this.y - 20, 30, 40);
+    image(enemyFireball, this.x - 16, this.y - 20, 30, 40);
   }
   update() {
     this.y += this.dy;
@@ -138,6 +139,7 @@ function setup() {
   enemyArray = [];
   enemyBulletArray = [];
   state = 1;
+  playerDead = false;
 }
 
 function draw() {
@@ -149,46 +151,59 @@ function draw() {
     enemies();
     interface();
   }
-
+  else if (state === 2){
+    deathScene();
+  }
 }
 
 function playerPlane() {
-  noStroke();
-  fill(0, 0, 0, 0);
-  ellipse(playerX, playerY, 30, 30);
-  image(plane, playerX - 20, playerY - 18, 40, 50);
+  if (lives > 0) {
+    noStroke();
+    fill(0, 0, 0, 0);
+    ellipse(playerX, playerY, 30, 30);
+    image(plane, playerX - 20, playerY - 18, 40, 50);
 
 
-  // Top Border
-  if (playerY - 16 > 50) {
-  // Go Up
-    if (keyIsDown(87)) {
-      playerY = playerY - 5;
+    // Top Border
+    if (playerY - 16 > 50) {
+    // Go Up
+      if (keyIsDown(87)) {
+        playerY = playerY - 5;
+      }
+    }
+
+    // Bottom Border
+    if (playerY + 16 < 650) {
+    // Go Down
+      if (keyIsDown(83)) {
+        playerY = playerY + 5;
+      }
+    }
+
+    // Go Right
+    if (keyIsDown(68)) {
+      playerX = playerX + 5;
+      if (playerX + 15 >= 700) {
+        playerX = 25;
+      }
+    }
+
+    // Go Left
+    if (keyIsDown(65)) {
+      playerX = playerX - 5;
+      if (playerX - 15 <= 0) {
+        playerX = 675;
+      }
+    }
+    if (playerDead) {
+      playerX = 350;
+      playerY = 500;
+      lives = lives - 1;
+      playerDead = false;
     }
   }
-
-  // Bottom Border
-  if (playerY + 16 < 650) {
-  // Go Down
-    if (keyIsDown(83)) {
-      playerY = playerY + 5;
-    }
-  }
-
-  // Go Right
-  if (keyIsDown(68)) {
-    playerX = playerX + 5;
-    if (playerX + 15 >= 700) {
-      playerX = 25;
-    }
-  }
-
-  // Go Left
-  if (keyIsDown(65)) {
-    playerX = playerX - 5;
-    if (playerX - 15 <= 0) {
-      playerX = 675;
-    }
+  else {
+    state = 2;
   }
 }
 
@@ -260,7 +275,6 @@ function shoot() {
 function enemies() {
   // Spawns enemies
   spawn = random(750);
-  fire = random(300);
   enemyX = floor(random(50, 650));
   if (spawn < 10) {
     let enemy = new Fighter(enemyX);
@@ -268,7 +282,8 @@ function enemies() {
   }
   // Moves/Removes enemies
   for (let i = enemyArray.length - 1; i >= 0; i--) {
-    if (fire < 9) {
+    fire = random(400);
+    if (fire < 4) {
       enemyArray[i].shoot();
     }
     enemyArray[i].update();
@@ -280,7 +295,7 @@ function enemies() {
 }
 
 function hitDetection() {
-  // Checks for Collison
+  // Checks for Collison between bullet and enemy
   for (let i = bulletArray.length - 1; i >= 0; i--) {
     for (let j = enemyArray.length - 1; j >= 0; j--) {
       if (collideCircleCircle(enemyArray[j].x, enemyArray[j].y, enemyArray[j].radius * 2, bulletArray[i].x, bulletArray[i].y, bulletArray[i].radius * 2)) {
@@ -291,4 +306,21 @@ function hitDetection() {
       }
     }
   }
+  // Checks for collision between player and enemy bullet
+  for (let m = enemyBulletArray.length - 1; m >= 0; m--) {
+    if (collideCircleCircle(playerX, playerY, 60, enemyBulletArray[m].x, enemyBulletArray[m].y, enemyBulletArray[m].radius * 2)) {
+      score += 10;
+      playerDead = true;
+      enemyBulletArray[m].dead = true;
+      break;
+    }
+  }
+}
+
+function deathScene() {
+  background(0);
+  textAlign(CENTER,CENTER);
+  textSize(35);
+  fill(255, 0, 0);
+  text("Bruh, you died like at least 3 times. Do better.",350,350);
 }
