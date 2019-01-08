@@ -26,7 +26,10 @@ let explosion;
 let fire;
 let enemyFireball;
 let enemyBulletArray;
-let playerDead;
+let playerHit;
+let faster;
+let slower;
+let health = 60;
 
 // class Timer {
 //   constructor(timeToWait) {
@@ -51,7 +54,7 @@ class Fighter {
   constructor(x) {
     this.x = x;
     this.y = 50;
-    this.dy = random(1, 3);
+    this.dy = 3;
     this.radius = 15;
     this.dead = false;
   }
@@ -139,7 +142,9 @@ function setup() {
   enemyArray = [];
   enemyBulletArray = [];
   state = 1;
-  playerDead = false;
+  playerHit = false;
+  faster = false;
+  slower = false;
 }
 
 function draw() {
@@ -161,8 +166,11 @@ function playerPlane() {
     noStroke();
     fill(0, 0, 0, 0);
     ellipse(playerX, playerY, 30, 30);
+    fill(0);
+    rect(playerX - 30, playerY - 28, 60, 8);
+    fill(0, 255, 0);
+    rect(playerX - 30, playerY - 28, health, 8);
     image(plane, playerX - 20, playerY - 18, 40, 50);
-
 
     // Top Border
     if (playerY - 16 > 50) {
@@ -195,11 +203,17 @@ function playerPlane() {
         playerX = 675;
       }
     }
-    if (playerDead) {
-      playerX = 350;
-      playerY = 500;
-      lives = lives - 1;
-      playerDead = false;
+    if (playerHit) {
+      if (health > 0) {
+        health -= 10;
+      }
+      else {
+        playerX = 350;
+        playerY = 500;
+        lives = lives - 1;
+        health = 60;
+      }
+      playerHit = false;
     }
   }
   else {
@@ -286,6 +300,17 @@ function enemies() {
     if (fire < 4) {
       enemyArray[i].shoot();
     }
+    // Moves fighters faster/slower depending on player movement and background movement
+    if (keyIsDown(87)) {
+      enemyArray[i].dy = 5;
+    }
+    else if (keyIsDown(83)) {
+      enemyArray[i].dy = 1.5;
+    }
+    else {
+      enemyArray[i].dy = 3;
+    }
+    //moves and displays enemy fighters
     enemyArray[i].update();
     enemyArray[i].display();
     if (enemyArray[i].y > 650 || enemyArray[i].dead) {
@@ -309,8 +334,7 @@ function hitDetection() {
   // Checks for collision between player and enemy bullet
   for (let m = enemyBulletArray.length - 1; m >= 0; m--) {
     if (collideCircleCircle(playerX, playerY, 60, enemyBulletArray[m].x, enemyBulletArray[m].y, enemyBulletArray[m].radius * 2)) {
-      score += 10;
-      playerDead = true;
+      playerHit = true;
       enemyBulletArray[m].dead = true;
       break;
     }
