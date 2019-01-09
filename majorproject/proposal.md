@@ -7,7 +7,6 @@ I want to build a project that allows someone to play "1942" fighter game
 - 2 version's of enemies
 - score
 - life count
--
 #### **Nice to have list:**
 - 2 types of weapons
 - death sequence
