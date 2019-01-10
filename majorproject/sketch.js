@@ -31,6 +31,8 @@ let playerHit;
 let faster;
 let slower;
 let health = 60;
+let bullet;
+let shotgun;
 
 // class Timer {
 //   constructor(timeToWait) {
@@ -172,6 +174,7 @@ function preload() {
 function setup() {
   createCanvas(700, 700);
   textFont("pacifico");
+  textAlign(CENTER,CENTER);
   playerX = 350;
   playerY = 500;
   backgroundY = 50;
@@ -183,14 +186,27 @@ function setup() {
   enemyArray = [];
   enemyBulletArray = [];
   enemySpreadBulletArray = [];
-  state = 1;
+  state = 0;
   playerHit = false;
   faster = false;
   slower = false;
+  shotgun = false;
+  bullet = false;
 }
 
 function draw() {
-  if (state === 1) {
+  if (state === 0) {
+    fill(0);
+    background(120);
+    textSize(40);
+    textAlign(CENTER);
+    text("Press the SPACE bar to begin the game", 350, 300);
+    textSize(32);
+    text("CONTROLS", 350, 450);
+    fill(255, 0, 0);
+    text ("Hold WASD to fly the oceans \n SPACE bar to shoot", 350, 500);
+  }
+  else if (state === 1) {
     moveBackground();
     playerPlane();
     hitDetection();
@@ -199,7 +215,7 @@ function draw() {
     interface();
   }
   else if (state === 2){
-    deathScene();
+    deathScreen();
   }
 }
 
@@ -247,7 +263,14 @@ function playerPlane() {
     }
     // Reduces health bar/resets if dead
     if (playerHit) {
-      health = health - 10;
+      if (bullet) {
+        health = health - 10;
+        bullet = false;
+      }
+      if (shotgun) {
+        health = health - 4;
+        shotgun = false;
+      }
       if (health <= 0) {
         playerX = 350;
         playerY = 500;
@@ -266,10 +289,20 @@ function playerPlane() {
 
 // Players ability to shoot
 function keyTyped() {
-  if (state === 1) {
+  if (state === 0) {
+    if (key === " ") {
+      state = 1;
+    }
+  }
+  else if (state === 1) {
     if (key === " ") {
       let bullet = new Bullet(playerX, playerY);
       bulletArray.push(bullet);
+    }
+  }
+  else if (state === 2) {
+    if (key === "r") {
+      reset();
     }
   }
 }
@@ -284,7 +317,7 @@ function interface() {
   textSize(45);
   textAlign(CENTER);
   // on-screen text
-  text("BOOM BOOM", width / 2, 40);
+  text("BOOM BOOM", width / 2, 35);
   textSize(28);
   textAlign(LEFT);
   text("LIVES: " + lives, 10, 687);
@@ -315,7 +348,7 @@ function moveBackground() {
   }
 }
 
-/////////////////////////vvvv//////////////////////
+
 function shoot() {
   // Moves/Removes bullets
   for (let i = bulletArray.length - 1; i >= 0; i--) {
@@ -335,9 +368,12 @@ function shoot() {
   for (let i = enemySpreadBulletArray.length - 1; i >= 0; i--) {
     enemySpreadBulletArray[i].update();
     enemySpreadBulletArray[i].display();
+    if (enemySpreadBulletArray[i].dead) {
+      enemySpreadBulletArray.splice(i, 1);
+    }
   }
 }
-//////////////////////////////////////////////////////////
+
 function enemies() {
   // Spawns enemies
   spawn = random(750);
@@ -353,7 +389,7 @@ function enemies() {
     if (fire < 4) {
       enemyArray[i].shoot();
     }
-    else if (fire < 100) {
+    else if (fire < 7) {
       enemyArray[i].shootSpread();
     }
     // Moves fighters faster/slower depending on player movement and background movement
@@ -373,7 +409,7 @@ function enemies() {
       enemyArray.splice(i, 1);
     }
     else if (enemyArray[i].y > 650) {
-      score -= 10;
+      score -= 4;
       enemyArray.splice(i, 1);
     }
   }
@@ -396,32 +432,46 @@ function hitDetection() {
     if (collideCircleCircle(playerX, playerY, 60, enemyBulletArray[m].x, enemyBulletArray[m].y, enemyBulletArray[m].radius * 2)) {
       playerHit = true;
       enemyBulletArray[m].dead = true;
+      bullet = true
       break;
     }
   }
   // Checks for collision between player and enemy "Shotgun" Bullets
   for (let m = enemySpreadBulletArray.length - 1; m >= 0; m--) {
-    if (collideCircleCircle(playerX, playerY, 60, enemyBulletArray[m].x1, enemyBulletArray[m].y1, enemyBulletArray[m].radius * 2)) {
+    if (collideCircleCircle(playerX, playerY, 60, enemySpreadBulletArray[m].x1, enemySpreadBulletArray[m].y1, enemySpreadBulletArray[m].radius * 2)) {
       playerHit = true;
       enemySpreadBulletArray[m].dead = true;
+      shotgun = true;
       break;
     }
-    else if (collideCircleCircle(playerX, playerY, 60, enemyBulletArray[m].x2, enemyBulletArray[m].y2, enemyBulletArray[m].radius * 2)) {
+    else if (collideCircleCircle(playerX, playerY, 60, enemySpreadBulletArray[m].x2, enemySpreadBulletArray[m].y2, enemySpreadBulletArray[m].radius * 2)) {
       playerHit = true;
       enemySpreadBulletArray[m].dead = true;
+      shotgun = true;
       break;
     }
-    else if (collideCircleCircle(playerX, playerY, 60, enemyBulletArray[m].x3, enemyBulletArray[m].y3, enemyBulletArray[m].radius * 2)) {
+    else if (collideCircleCircle(playerX, playerY, 60, enemySpreadBulletArray[m].x3, enemySpreadBulletArray[m].y3, enemySpreadBulletArray[m].radius * 2)) {
       playerHit = true;
       enemySpreadBulletArray[m].dead = true;
+      shotgun = true;
       break;
+    }
+  }
+  ////////////////////////////////////////////////////////////////////////
+  // Checks collision between Bullets
+  for (let m = bulletArray.length - 1; m >= 0; m--) {
+    for (let j = enemySpreadBulletArray.length - 1; j >= 0; j--) {
+      if (collideCircleCircle(bulletArray[m].x, bulletArray[m].y, bulletArray[m].radius * 2, enemySpreadBulletArray[j].x1, enemySpreadBulletArray[j].y1, enemySpreadBulletArray[j].radius * 2)) {
+        bulletArray[m].dead = true;
+        enemySpreadBulletArray[j].dead = true;
+        break;
+      }
     }
   }
 }
 
-function deathScene() {
+function deathScreen() {
   background(0);
-  textAlign(CENTER,CENTER);
   textSize(32);
   fill(255, 0, 0);
   text("Bruh, you died like at least 3 times. Do better.",350,350);
@@ -430,5 +480,19 @@ function deathScene() {
     textSize(20);
     text("Somehow you have also managed to do so horrible, \n the code added in negative numbers just for you.", 350, 400);
   }
+  fill(255);
+  text("Press the 'r' key to reset game", 350, 600);
 
+}
+
+function reset() {
+  state = 1;
+  lives = 3;
+  score = 0;
+  enemyArray = [];
+  enemyBulletArray = [];
+  enemySpreadBulletArray = [];
+  health = 60;
+  playerX = 350;
+  playerY = 500;
 }
