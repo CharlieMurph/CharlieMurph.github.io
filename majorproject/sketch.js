@@ -27,31 +27,34 @@ let fire;
 let enemyFireball;
 let enemyBulletArray;
 let enemySpreadBulletArray;
+let deathBeamArray;
+let deathBeamTimerArray;
 let playerHit;
 let faster;
 let slower;
 let health = 60;
 let bullet;
 let shotgun;
-
-// class Timer {
-//   constructor(timeToWait) {
-//     this.startTime = millis();
-//     this.waitTime = timeToWait;
-//   }
-//
-//   reset(timeToWait) {
-//     this.startTime = millis();
-//     this.waitTime = timeToWait;
-//   }
-//
-//   isDone() {
-//     return millis() >= this.startTime + this.waitTime;
-//   }
-//
-// }
+let bulletShot;
 
 
+
+class Timer {
+  constructor(timeToWait) {
+    this.startTime = millis();
+    this.waitTime = timeToWait;
+  }
+
+  reset(timeToWait) {
+    this.startTime = millis();
+    this.waitTime = timeToWait;
+  }
+
+  isDone() {
+    return millis() >= this.startTime + this.waitTime;
+  }
+
+}
 
 class Fighter {
   constructor(x) {
@@ -82,6 +85,28 @@ class Fighter {
     enemySpreadBulletArray.push(enemyBullet);
   }
 }
+
+// class DeathBeam {
+//   constructor(x) {
+//     this.x = x;
+//     this.color = color(255, 255, 0);
+//     this.dead = false;
+//     let beamTimer = new Timer(1000);
+//     deathBeamTimerArray.push(beamTimer);
+//
+//
+//   }
+//   display() {
+//     fill(this.color);
+//     noStroke();
+//     rect(this.x, 650, 40, 600);
+//   }
+//   update() {
+//     if (beamTimer.isDone()) {
+//       this.dead = true;
+//     }
+//   }
+// }
 
 class EnemyBullet {
   constructor(x, y) {
@@ -186,12 +211,15 @@ function setup() {
   enemyArray = [];
   enemyBulletArray = [];
   enemySpreadBulletArray = [];
+  deathBeamArray = [];
+  deathBeamTimerArray = [];
   state = 0;
   playerHit = false;
   faster = false;
   slower = false;
   shotgun = false;
   bullet = false;
+  bulletShot = false;
 }
 
 function draw() {
@@ -372,6 +400,17 @@ function shoot() {
       enemySpreadBulletArray.splice(i, 1);
     }
   }
+  // for (let i = deathBeamArray.length - 1; i >= 0; i--) {
+  //   deathBeamArray[i].update();
+  //   deathBeamArray[i].display();
+  //   if (deathBeamArray[i].dead) {
+  //     deathBeamArray.splice(i, 1);
+  //   }
+
+  if (bulletShot) {
+    score += 1;
+    bulletShot = false;
+  }
 }
 
 function enemies() {
@@ -382,6 +421,10 @@ function enemies() {
     let enemy = new Fighter(enemyX);
     enemyArray.push(enemy);
   }
+  // else if (spawn < 12) {
+  //   let beam = new DeathBeam(enemyX);
+  //   deathBeamArray.push(beam);
+  // }
   // Moves/Removes enemies
   for (let i = enemyArray.length - 1; i >= 0; i--) {
     // probability of enemy shooting
@@ -460,10 +503,33 @@ function hitDetection() {
   ////////////////////////////////////////////////////////////////////////
   // Checks collision between Bullets
   for (let m = bulletArray.length - 1; m >= 0; m--) {
+    // Collision between player bullets and shotgun bullets
     for (let j = enemySpreadBulletArray.length - 1; j >= 0; j--) {
       if (collideCircleCircle(bulletArray[m].x, bulletArray[m].y, bulletArray[m].radius * 2, enemySpreadBulletArray[j].x1, enemySpreadBulletArray[j].y1, enemySpreadBulletArray[j].radius * 2)) {
         bulletArray[m].dead = true;
         enemySpreadBulletArray[j].dead = true;
+        bulletShot = true;
+        break;
+      }
+      if (collideCircleCircle(bulletArray[m].x, bulletArray[m].y, bulletArray[m].radius * 2, enemySpreadBulletArray[j].x2, enemySpreadBulletArray[j].y2, enemySpreadBulletArray[j].radius * 2)) {
+        bulletArray[m].dead = true;
+        enemySpreadBulletArray[j].dead = true;
+        bulletShot = true;
+        break;
+      }
+      if (collideCircleCircle(bulletArray[m].x, bulletArray[m].y, bulletArray[m].radius * 2, enemySpreadBulletArray[j].x3, enemySpreadBulletArray[j].y3, enemySpreadBulletArray[j].radius * 2)) {
+        bulletArray[m].dead = true;
+        enemySpreadBulletArray[j].dead = true;
+        bulletShot = true;
+        break;
+      }
+    }
+    // Collision between playerbullets and enemy bullets
+    for (let j = enemyBulletArray.length - 1; j >= 0; j--) {
+      if (collideCircleCircle(bulletArray[m].x, bulletArray[m].y, bulletArray[m].radius * 2, enemyBulletArray[j].x, enemyBulletArray[j].y, enemyBulletArray[j].radius * 2)) {
+        bulletArray[m].dead = true;
+        enemyBulletArray[j].dead = true;
+        bulletShot = true;
         break;
       }
     }
@@ -474,6 +540,7 @@ function deathScreen() {
   background(0);
   textSize(32);
   fill(255, 0, 0);
+  textAlign(CENTER);
   text("Bruh, you died like at least 3 times. Do better.",350,350);
   text("Your score was: " + score, 350, 450);
   if (score < 0) {
